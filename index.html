@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Simon</title>
+	<style>
+		div {
+			display: inline-block;
+			width: 50px;
+			height: 50px;
+			border: 1px solid;
+			cursor: pointer;
+			
+			transition-property: background;
+			transition-duration: .5s;
+		}
+		#green {
+			background: green;
+		}
+		#red {
+			background: red;
+		}
+		#yellow {
+			background: yellow;
+		}
+		#blue {
+			background: blue;
+		}
+		span {
+			padding: 5px;
+			margin: 5px;
+			display: inline-block;
+			border: 1px solid;
+			color: darkred;
+			font-size: 1.5em;
+			
+		}
+	</style>
+</head>
+<body>
+	<div id="green"></div>
+	<div id="red"></div>
+	<div id="yellow"></div>
+	<div id="blue"></div><br>
+	<input id='easy' type="submit" value="easy">
+	<input id='hard' type="submit" value="hard"><br>
+	<span id='result'>0</span>
+	<!-- <input id='lineButton' type="submit" value="repeat"> -->
+	<script>
+		
+		
+		var difficult = true;
+		easy.addEventListener('click', function() {
+			difficult = false;
+		}) 
+		easy.addEventListener('click', random);
+
+		// сколько очков я набрал
+		var score = 0;
+
+		resetColor();
+		// Очередность показа элементов, сохраняю цвет
+		var randomLine = [];
+		var chooseBlock = document.querySelectorAll('div');
+
+
+		hard.addEventListener('click', random);
+		// lineButton.addEventListener('click', showLine);
+
+		for(var i = 0; i < chooseBlock.length; i++) { 
+			var local = chooseBlock[i];
+			local.addEventListener('click', myStep);
+		}
+
+		function random() {
+			var randomItem = Math.floor(Math.random() * chooseBlock.length);
+			// Сохраняю цвет рандомного элемента
+			randomLine.push(chooseBlock[randomItem].style.background);
+			// animation(chooseBlock[randomItem]);
+			showLine();
+		}
+
+		var itemInRandomLine = 0;
+
+		function myStep() {
+
+
+			// Проверка последнего хода
+			// Нужно проверить все ходы
+			if (this.style.background == randomLine[itemInRandomLine] && randomLine.length == itemInRandomLine + 1) {
+				// Комбинация набрана верно, сбрасываем проверку на первый элемент
+				itemInRandomLine = 0;
+				random();
+
+				score++;
+				result.innerHTML = score;
+
+				// Пока длина массива с цвета не совпадет (itemInRandomLine + 1) крутим проверку
+			} else if (this.style.background == randomLine[itemInRandomLine] && randomLine.length != itemInRandomLine + 1) {
+				itemInRandomLine += 1;
+			} 
+			else {
+				// в зависимости от сложности 
+				// hard - сбросить до нуля
+				// easy - вернуться на шаг назад
+
+
+
+				if (difficult) { 
+					// При ошибке, сбрасываем проверку на первый элемент и очищаем массив с цветами - strict mode
+					itemInRandomLine = 0;
+					randomLine = [];
+					// вывод результата
+					score = 0;
+					result.innerHTML = score;
+					// можно отменить автозапуск
+					console.log('lose'); 
+				} else { 
+					showLine();
+				}
+
+
+			}
+			animation(this);
+		}
+
+
+		function animation(item) {
+			item.style.background = 'purple';
+			setTimeout(resetColor, 500);
+		}
+
+		// Сбрасывать цвета во время анимации
+		function resetColor() {
+			green.style.background = 'green';
+			red.style.background = 'red';
+			yellow.style.background = 'yellow';
+			blue.style.background = 'blue';
+		}
+    
+
+    function showLine() {
+    		var count = 0;
+    		var interval = setInterval(function() {
+    			switch (randomLine[count]) {
+    				case 'green':
+    					animation(green);
+    					break;
+					case 'red':
+    					animation(red);
+    					break;
+					case 'yellow':
+    					animation(yellow);
+    					break;
+					case 'blue':
+    					animation(blue);
+    					break;
+    			}
+    			count++;
+    			if (count >= randomLine.length) {
+    				clearInterval(interval);
+    			} 
+    			// Интервал должен быть больше чем Таймаут
+    		}, 1000);
+    }
+
+	</script>
+</body>
+</html>
