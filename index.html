@@ -76,6 +76,8 @@
 		var difficult = false;
 		// сколько очков я набрал
 		var score = 1;
+		// Очередность показа элементов, сохраняю цвет
+		var randomLine = [];
 
 		// При нажатии на strict меняется сложность
 		strict.addEventListener('click', function() {
@@ -95,6 +97,10 @@
 
 		// !!! Выводить сообщения подсказки		
 		
+		start.addEventListener('click', function() {
+			// Сброс линии при нажатии кнопки старт
+			randomLine = [];
+		});
 		start.addEventListener('click', random);
 
 		// !!! Создать экран поздравления 
@@ -102,8 +108,6 @@
 			console.log('Congrat you!!')
 		}
 
-		// Очередность показа элементов, сохраняю цвет
-		var randomLine = [];
 		var chooseBlock = document.querySelectorAll('div');
 
 		for(var i = 0; i < chooseBlock.length; i++) { 
